@@ -1,0 +1,44 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Title:</strong>
+  <%= @post.title %>
+</p>
+
+<p>
+  <strong>Body:</strong>
+  <%= @post.body %>
+</p>
+
+<p>
+  <strong>City:</strong>
+  <%= @post.city %>
+</p>
+
+<p>
+  <strong>Country:</strong>
+  <%= @post.country %>
+</p>
+
+<p>
+  <strong>Gps location:</strong>
+  <%= @post.gps_location %>
+</p>
+
+<p>
+  <strong>Privacy:</strong>
+  <%= @post.privacy %>
+</p>
+
+<p>
+  <strong>Visible:</strong>
+  <%= @post.visible %>
+</p>
+
+<p>
+  <strong>Mark:</strong>
+  <%= @post.mark %>
+</p>
+
+<%= link_to 'Edit', edit_post_path(@post) %> |
+<%= link_to 'Back', posts_path %>

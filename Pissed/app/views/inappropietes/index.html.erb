@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Inappropietes</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Justification</th>
+      <th>Flag</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @inappropietes.each do |inappropiete| %>
+      <tr>
+        <td><%= inappropiete.justification %></td>
+        <td><%= inappropiete.flag %></td>
+        <td><%= link_to 'Show', inappropiete %></td>
+        <td><%= link_to 'Edit', edit_inappropiete_path(inappropiete) %></td>
+        <td><%= link_to 'Destroy', inappropiete, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Inappropiete', new_inappropiete_path %>

@@ -1,0 +1,27 @@
+<p id="notice"><%= notice %></p>
+
+<h1>File Attachment Dumps</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Url</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @file_attachment_dumps.each do |file_attachment_dump| %>
+      <tr>
+        <td><%= file_attachment_dump.url %></td>
+        <td><%= link_to 'Show', file_attachment_dump %></td>
+        <td><%= link_to 'Edit', edit_file_attachment_dump_path(file_attachment_dump) %></td>
+        <td><%= link_to 'Destroy', file_attachment_dump, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New File Attachment Dump', new_file_attachment_dump_path %>

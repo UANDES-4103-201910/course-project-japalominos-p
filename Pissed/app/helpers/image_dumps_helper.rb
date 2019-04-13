@@ -1,0 +1,2 @@
+module ImageDumpsHelper
+end

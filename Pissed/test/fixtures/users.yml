@@ -1,0 +1,23 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  nick_name: MyString
+  email: MyString
+  password: MyString
+  flags: 1
+  suspended: false
+  admin: false
+  geofence_ver: false
+  geofence: false
+  superadmin: false
+
+two:
+  nick_name: MyString
+  email: MyString
+  password: MyString
+  flags: 1
+  suspended: false
+  admin: false
+  geofence_ver: false
+  geofence: false
+  superadmin: false

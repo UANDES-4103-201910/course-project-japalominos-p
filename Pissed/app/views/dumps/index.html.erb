@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Dumps</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Author</th>
+      <th>Title</th>
+      <th>Body</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @dumps.each do |dump| %>
+      <tr>
+        <td><%= dump.author %></td>
+        <td><%= dump.title %></td>
+        <td><%= dump.body %></td>
+        <td><%= link_to 'Show', dump %></td>
+        <td><%= link_to 'Edit', edit_dump_path(dump) %></td>
+        <td><%= link_to 'Destroy', dump, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Dump', new_dump_path %>

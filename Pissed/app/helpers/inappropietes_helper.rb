@@ -1,0 +1,2 @@
+module InappropietesHelper
+end

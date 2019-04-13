@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Author:</strong>
+  <%= @dump.author %>
+</p>
+
+<p>
+  <strong>Title:</strong>
+  <%= @dump.title %>
+</p>
+
+<p>
+  <strong>Body:</strong>
+  <%= @dump.body %>
+</p>
+
+<%= link_to 'Edit', edit_dump_path(@dump) %> |
+<%= link_to 'Back', dumps_path %>
