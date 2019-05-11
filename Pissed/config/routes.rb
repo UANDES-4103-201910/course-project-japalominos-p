@@ -1,6 +1,4 @@
-Rails.application.routes.draw do
-  root to: "home#start"
-    
+Rails.application.routes.draw do    
   resources :blacklists
   resources :dumps do
       resources :image_dumps
@@ -40,4 +38,13 @@ Rails.application.routes.draw do
   resources :posts, concerns: [:commentable, :shareable, :followable, :inappropietable, :validationable, :file_attachmentable, :image_postable]
   resources :comments, concerns: [:comment_of_commentable]
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+  root :to => 'starts#new'
+    
+  post '/login',    to: 'starts#create', as: :log_in
+  delete '/log_out' => 'starts#destroy', as: :log_out
+  
+  get '/main_page' => 'main#index', as: :main      
+    
+  get '/sign_in' => 'registrations#new', as: :registrations
+  post '/sign_in' => 'registrations#create', as: :sign_in
 end
