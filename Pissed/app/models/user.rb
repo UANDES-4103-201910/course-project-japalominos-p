@@ -10,10 +10,14 @@ class User < ApplicationRecord
     user = User.where(email: data['email']).first
       
     unless user
+         
          user = User.create(name: data['name'],
             email: data['email'],
             password: Devise.friendly_token[0,20]
          )
+        profile = Profile.create(user_id: user["id"])
+        profile.save
+        
      end
     user  
   end    

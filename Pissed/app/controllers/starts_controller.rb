@@ -1,5 +1,8 @@
 class StartsController < ApplicationController
   def new 
+      if user_signed_in?
+          redirect_to main_path
+      end
   end
   def create 
       @user = User.where(password: params[:start][:password], email: params[:start][:email])[0]
