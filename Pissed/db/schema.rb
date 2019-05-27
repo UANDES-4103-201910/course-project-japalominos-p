@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_04_12_042941) do
+ActiveRecord::Schema.define(version: 2019_05_27_000010) do
 
   create_table "blacklists", force: :cascade do |t|
     t.date "date_suspended"
@@ -103,6 +103,8 @@ ActiveRecord::Schema.define(version: 2019_04_12_042941) do
     t.boolean "mark"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "user_id"
+    t.index ["user_id"], name: "index_posts_on_user_id"
   end
 
   create_table "profiles", force: :cascade do |t|
@@ -138,6 +140,13 @@ ActiveRecord::Schema.define(version: 2019_04_12_042941) do
     t.boolean "superadmin"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "encrypted_password", default: "", null: false
+    t.string "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.string "name"
+    t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
   create_table "validations", force: :cascade do |t|

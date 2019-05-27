@@ -1,4 +1,5 @@
-Rails.application.routes.draw do    
+Rails.application.routes.draw do  
+  devise_for :users, controllers: { omniauth_callbacks: 'users/omniauth_callbacks' }    
   resources :blacklists
   resources :dumps do
       resources :image_dumps
@@ -47,4 +48,6 @@ Rails.application.routes.draw do
     
   get '/sign_in' => 'registrations#new', as: :registrations
   post '/sign_in' => 'registrations#create', as: :sign_in
+  
+  patch '/update_profile' => 'profile#update', as: :update_profile
 end

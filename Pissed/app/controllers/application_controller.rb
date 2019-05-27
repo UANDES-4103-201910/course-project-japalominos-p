@@ -5,9 +5,7 @@ class ApplicationController < ActionController::Base
 
   end
 
-  def current_user
-      @current_user = session[:logged_user]
-  end
+ 
 
   def is_user_logged_in?
     logged_in = false
