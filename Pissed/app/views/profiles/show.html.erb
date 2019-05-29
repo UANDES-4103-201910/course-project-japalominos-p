@@ -27,8 +27,11 @@
   <%= @profile.country %>
 </p>
 
-
-<%= link_to 'Edit', edit_user_profile_path(@profile) %> |
+<% if current_user.admin? %>
+        <%= link_to 'Config. User', user_path%> |
+<% end %>
+        
+<%= link_to 'Edit', edit_user_profile_path%> |
 <%= link_to 'Back', main_path %>
         </div>
     <div class="col-lg-8"></div>

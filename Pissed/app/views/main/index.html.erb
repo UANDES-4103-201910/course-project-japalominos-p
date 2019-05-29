@@ -6,7 +6,7 @@
     </head> 
     <body>
           <nav class="navbar navbar-expand-lg navbar-light " style="background-color: crimson">
-              <a class="navbar-brand"  href='users/<%= current_user.id %>/profiles/<%= @profile["id"] %>' >Profile</a>
+              <%= link_to "Profile", user_profile_path(current_user,Profile.where(user_id: current_user.id).take), class: "navbar-brand" %>
               <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
               </button>
@@ -24,8 +24,8 @@
                   <a class="dropdown-item" href="#">Post's Denounced</a>
                 </div>
               </li>
-            <form class="form-inline my-2 my-lg-0">
-            <input class="form-control form-control-sm" type="search" placeholder="Search" aria-label="Search">
+            <form action="/profiles" method="show" class="form-inline my-2 my-lg-0">
+            <input class="form-control form-control-sm" type="text" placeholder="Search" aria-label="Search" name="q">  
             <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Search</button>
             </form>
             <li class="nav-item">
@@ -35,7 +35,8 @@
             
           </div>
           </nav>
-  
+  <% if can? :manage, Profile, user_id: current_user.id %>
+<% end %>
         <div class="container">
       <p></p>
         <div class="row">
@@ -92,5 +93,6 @@
           </div>
         </div>
         <% end %>
+            
     </body>
 </html>

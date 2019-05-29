@@ -42,7 +42,7 @@ class UsersController < ApplicationController
   def update
     respond_to do |format|
       if @user.update(user_params)
-        format.html { redirect_to @user, notice: 'User was successfully updated.' }
+        format.html { redirect_to user_profile_path(@user,Profile.where(user_id: @user.id).take ) , notice: 'User was successfully updated.' }
         format.json { render :show, status: :ok, location: @user }
       else
         format.html { render :edit }
@@ -54,9 +54,11 @@ class UsersController < ApplicationController
   # DELETE /users/1
   # DELETE /users/1.json
   def destroy
+    @profile= Profile.where(user_id: @user.id).take
+    @profile.destroy  
     @user.destroy
     respond_to do |format|
-      format.html { redirect_to users_url, notice: 'User was successfully destroyed.' }
+      format.html { redirect_to main_path, notice: 'User was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
@@ -69,6 +71,12 @@ class UsersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
-      params.require(:user).permit(:nick_name, :email, :password)
+      if current_user.superadmin?     
+          params.require(:user).permit(:nick_name, :email, :password, :admin, :geofence_ver, :geofence)
+      else 
+          params.require(:user).permit(:nick_name, :email, :password)
+      end
+          
+          
     end
 end
