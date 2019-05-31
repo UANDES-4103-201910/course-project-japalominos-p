@@ -12,7 +12,7 @@ class Post < ApplicationRecord
     has_many :users, through: :follows
     has_many :validation
     has_many :users, through: :validation
-    validates :title, :body, :privacy, :visible, presence: true
+    validates :title, :body, presence: true
     validates :title, length: {maximum: 40}
     validates :body, length: {maximum: 150}
     validates :mark, absence: true 

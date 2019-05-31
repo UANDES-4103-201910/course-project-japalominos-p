@@ -10,8 +10,6 @@ class ProfilesController < ApplicationController
   # GET /profiles/1
   # GET /profiles/1.json
   def show
-     @posts= Post.where(user_id: current_user.id).take
-     @user=User.where(id: @profile.user_id).take
   end
 
   # GET /profiles/new

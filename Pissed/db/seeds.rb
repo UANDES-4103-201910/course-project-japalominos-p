@@ -5,13 +5,21 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
-   superadmin = User.create(id: 12, nick_name: "SuperAdmin", email: "jaco2pv@live.cl", password: "12341234", admin: true, superadmin: true, name: "Joaquin")
+  users = [User.new( nick_name: "SuperAdmin", email: "jaco2pv@live.cl", password: "12341234", admin: true, superadmin: true, name: "Joaquin")]
+for us in users do
+    us.save
+end
 
 
 
+   profiles = [Profile.create(user_id: 1, bio: "SUPERADMIN", country: "Chile", city: "Santiago")]
+for pr in profiles do
+    pr.save
+end
 
-   profilesuperadmin = Profile.create(user_id: 12, bio: "SUPERADMIN", country: "Chile", city: "Santiago")
 
+posts = [Post.new(user_id: 1, title: 'title', body: "body", city: 'Santiago', country: 'Chile', privacy: true, visible: true )]
 
-
-#Post.create({title: 'title', body: "body",city: 'Santiago', country: 'Chile', privacy: true, visible: true, mark: true })
+for po in posts do
+    po.save
+end

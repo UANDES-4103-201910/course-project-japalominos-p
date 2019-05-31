@@ -5,36 +5,7 @@
         <meta charset="utf-8">
     </head> 
     <body>
-          <nav class="navbar navbar-expand-lg navbar-light " style="background-color: crimson">
-              <%= link_to "Profile", user_profile_path(current_user,Profile.where(user_id: current_user.id).take), class: "navbar-brand" %>
-              <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-              </button>
-              
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-              <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  Bad-Boys
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <a class="dropdown-item" href="#">Blacklist</a>
-                  <a class="dropdown-item" href="#">DumpList</a>
-                  <div class="dropdown-divider"></div>
-                  <a class="dropdown-item" href="#">Post's Denounced</a>
-                </div>
-              </li>
-            <form action="/profiles" method="show" class="form-inline my-2 my-lg-0">
-            <input class="form-control form-control-sm" type="text" placeholder="Search" aria-label="Search" name="q">  
-            <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Search</button>
-            </form>
-            <li class="nav-item">
-                <a class="nav-link my-2 my-sm-0 " href="#">Log Out</a>
-            </li>
-            </ul>
-            
-          </div>
-          </nav>
+          
   <% if can? :manage, Profile, user_id: current_user.id %>
 <% end %>
         <div class="container">
@@ -44,26 +15,32 @@
             </div>
             <div class="col-6 border">
                 <Strong>Create a Post</Strong>
-              <form>
+              <form action="/users/<%= current_user.id %>/posts" method = "post">
+                <div style="margin:0;padding:0">
+                    <input name="authenticity_token" type="hidden" value="<%= form_authenticity_token %>" />
+                </div>  
           <div class="form-group">
-            <label for="InputTitle">Title:</label>
-            <input type="title" class="form-control" id="InputTitle"  placeholder="Title">
+            <label for="title">Title:</label>
+            <input type="title" class="form-control" id="title" name="title"  placeholder="Title">
           </div>
           <div class="form-group">
-            <label for="InputBody">Body:</label>
-            <textarea class="form-control" id="InputBody" placeholder="Body" rows="3"></textarea>
+            <label for="body">Body:</label>
+            <textarea class="form-control" id="body" name="body" placeholder="Body" rows="3"></textarea>
           </div>
           <div class="form-group form-check">
               <div class="container">
                   <div class="row">
                     <div class="col-sm">
-                       <input type="checkbox" class="form-check-input" id="CheckVisible">
-                       <label class="form-check-label " for="CheckVisible">Visible?</label>
+                        <input type="checkbox" class="form-check-input" id="privacy" name="privacy">
+                       <label class="form-check-label " for="privacy">Privacy</label>
+                        
                     </div>
                     <div class="col-sm">
-
+                        <input id ="country" type="hidden" id="country" name="country" value= "<%= @profile.country %>" />    
                     </div>
                     <div class="col-sm">
+                      
+                        <input id ="city" type="hidden" name="city" id="city" value= "<%= @profile.city %>" />
                       <button type="submit" class="btn btn-primary">Post</button>
                     </div>
                   </div>
@@ -75,24 +52,72 @@
              
             </div>
           </div>
-        <% @posts.each do |post| %>
+    
+        </div>
+        <div >
+
+            </div>
+        <div class="container">
+            <% @posts.each do |post| %>
           <div class="row">
             <div class="col">
-                <img class="rounded-circle" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" alt="Generic placeholder image" width="140" height="140">
+                
             </div>
-            <div class="col-6">
-                <div>
-                <ion-icon name="contact"></ion-icon> <%= post.title %>
+            <div class="col-6 border">
+                <div class="container">
+                  <div class="row">
+                    <div class="col-sm-4"><%= link_to  post.user.nick_name , user_profile_path(User.where(user_id: post.user.id), Profile.where(user: post.user)) %></div>
+                    
+                    <div class="col-sm-8"><strong><%= post.title %></strong></div>
+                  </div>
+                   <div>  </div>
+                  <div class="row">
+                    <div class="col-sm-4"></div>
+                    <div class="col-sm-8 border"><%= post.body %></div>
+                  </div> 
+                  <div>  </div>
+                  <div class="row">
+                    <div class="col-sm-4">
+                        <% if post.privacy? && post.mark?  %>
+                        <i class="fas fa-comment-slash"></i>
+                        <i class="fas fa-lock"></i>
+                        <% elsif post.privacy? %>
+                        <i class="fas fa-comment-slash"></i>
+                        <i class="fas fa-unlock"></i>
+                        <% else %> 
+                       <i class="far fa-comment"></i> 
+                      <% end %>
+                      </div>
+                      <div class="col-sm-8 ">
+                        <div class="container">
+                        <div class="row">
+                            <div class="col">
+                                <%= link_to user_validations_path( :user_id => current_user.id, :post_id => post.id, :valid => false ), :method => :post  do %>
+                               
+                                <%= content_tag(:i,"",class: "far fa-hand-point-down").html_safe %>
+                                <% end %>
+                                <%= link_to  user_validations_path(:user_id => current_user.id, :post_id => post.id, :valid => true ), :method => :post do %>
+                                <%= content_tag(:i,"",class: "far fa-hand-point-up").html_safe %>
+                                <% end %>
+                              
+                            </div>
+                            <div class="col">
+                              <i class="far fa-eye"></i>
+                            </div>
+                            <div class="col">
+                              <i class="far fa-flag"></i>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                  </div>       
                 </div>
-                <div>
-                <%= post.body %>
-                </div>
-                <div><ion-icon name="flag"></ion-icon></div>
             </div>
             <div class="col"></div>
           </div>
+            <% end %>
         </div>
-        <% end %>
+        
             
     </body>
 </html>

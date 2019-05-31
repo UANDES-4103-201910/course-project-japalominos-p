@@ -1,6 +1,6 @@
 class PostsController < ApplicationController
   before_action :set_post, only: [:show, :edit, :update, :destroy]
-
+  
   # GET /posts
   # GET /posts.json
   def index
@@ -26,7 +26,9 @@ class PostsController < ApplicationController
   def create
     @user = User.find(params[:user_id])
     @post = @user.posts.new(post_params)
-
+    if @post.privacy === nil
+        @post.privacy = false
+    end
     respond_to do |format|
       if @post.save
         format.html { redirect_to @post, notice: 'Post was successfully created.' }
@@ -72,6 +74,6 @@ class PostsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def post_params
-      params.require(:post).permit(:title, :body, :city, :country, :gps_location, :privacy, :visible, :mark)
+      params.permit(:user_id, :title, :body, :city, :country, :gps_location, :privacy)
     end
 end
