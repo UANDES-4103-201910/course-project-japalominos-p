@@ -26,8 +26,9 @@
   <%= @profile.country %>
 </p>
 
+<%= link_to 'Config. User', user_path %> |
 <% if current_user.admin? %>
-        <%= link_to 'Config. User', user_path%> |
+        <%= link_to 'Config. User', user_path %> |
 <% end %>
         
 <%= link_to 'Edit', edit_user_profile_path%> |

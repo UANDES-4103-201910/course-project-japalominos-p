@@ -25,11 +25,12 @@
   <%= @user.suspended %>
 </p>
 
+<% if current_user.admin? %>
+                
 <p>
   <strong>Admin:</strong>
   <%= @user.admin %>
 </p>
-
 <p>
   <strong>Geofence ver:</strong>
   <%= @user.geofence_ver %>
@@ -40,13 +41,14 @@
   <%= @user.geofence %>
 </p>
 
-<p>
-  <strong>Superadmin:</strong>
+<% end %>
+
+<% if current_user.superadmin? %>
+                <strong>Superadmin:</strong>
+<% end %>
   <%= @user.superadmin %>
-</p>
 <% if current_user.admin  %>
     <% if (@user.admin || @user.superadmin ) %>
-        <%= button_to "Destroy that account", user_path, data: { confirm: "Are you sure?" }, method: :delete %>
     <% else %>
      <%= button_to "Destroy that account", user_path, data: { confirm: "Are you sure?" }, method: :delete %>
     <% end %>

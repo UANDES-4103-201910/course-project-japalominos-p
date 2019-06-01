@@ -25,6 +25,7 @@ h1 {
 body {
   margin: 0;
   margin-bottom: 40px;
+  overflow: scroll;
 }
 footer {
     background-color: crimson;
