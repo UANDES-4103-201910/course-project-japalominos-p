@@ -5,7 +5,7 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
-  users = [User.new( nick_name: "SuperAdmin", email: "jaco2pv@live.cl", password: "12341234", admin: true, superadmin: true, name: "Joaquin")]
+  users = [User.new( nick_name: "SuperAdmin", email: "superadmin@admin.cl", password: "12341234", admin: true, superadmin: true, name: "admin")]
 for us in users do
     us.save
 end
