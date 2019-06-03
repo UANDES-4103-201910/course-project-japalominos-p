@@ -14,7 +14,7 @@ class InappropietesController < ApplicationController
 
   # GET /inappropietes/new
   def new
-    @inappropiete = Inappropiete.new
+    @inappropiete = Inappropiete.new(current_user, post)
   end
 
   # GET /inappropietes/1/edit
@@ -25,13 +25,14 @@ class InappropietesController < ApplicationController
   # POST /inappropietes.json
   def create
     @inappropiete = Inappropiete.new(inappropiete_params)
-
+    @inappropiete.user_id = current_user.id
+    @inappropiete.post_id = params["post_id"]  
     respond_to do |format|
       if @inappropiete.save
-        format.html { redirect_to @inappropiete, notice: 'Inappropiete was successfully created.' }
+        format.html { redirect_to root_path, notice: 'Inappropiete was successfully created.' }
         format.json { render :show, status: :created, location: @inappropiete }
       else
-        format.html { render :new }
+        format.html { root_path }
         format.json { render json: @inappropiete.errors, status: :unprocessable_entity }
       end
     end
@@ -69,6 +70,6 @@ class InappropietesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def inappropiete_params
-      params.require(:inappropiete).permit(:justification, :flag)
+      params.permit(:justification)
     end
 end

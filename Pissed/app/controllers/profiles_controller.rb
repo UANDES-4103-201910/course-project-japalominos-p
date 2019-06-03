@@ -41,6 +41,7 @@ class ProfilesController < ApplicationController
   # PATCH/PUT /profiles/1
   # PATCH/PUT /profiles/1.json
   def update
+    @profile.picture.attach(params[:picture])
     respond_to do |format|
       if @profile.update(profile_params)
         format.html { redirect_to user_profile_path, notice: 'Profile was successfully updated.' }
@@ -68,10 +69,11 @@ class ProfilesController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_profile
       @profile = Profile.find(params[:id])
+      @posts = Post.where(user_id: params[:user_id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def profile_params
-      params.require(:profile).permit(:picture, :bio, :gps_location, :city, :country)
+      params.require(:profile).permit(:bio, :gps_location, :city, :country, :picture)
     end
 end

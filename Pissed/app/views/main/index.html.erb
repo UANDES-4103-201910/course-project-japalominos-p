@@ -3,10 +3,15 @@
     <head>
         <title>Log_in</title>
         <meta charset="utf-8">
+        <style>
+            .commentary{
+                display: none;
+            }
+        </style>
+        <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
     </head> 
     
-    <body>
-        
+    <body> 
          &nbsp;
         <div class="container">
         <div class="row">
@@ -26,6 +31,14 @@
             <label for="body">Body:</label>
             <textarea class="form-control" id="body" name="body" placeholder="Body" rows="3"></textarea>
           </div>
+          <div class="form-group">
+            <label for="images">Images:</label>
+          <input class="form-control-file" id="images" name="images" type="file">
+          </div> 
+            <div class="form-group">
+            <label for="files">Files:</label>
+          <input class="form-control-file" id="files" name="files" type="file" >
+          </div>      
           <div class="form-group form-check">
               <div class="container">
                   <div class="row">
@@ -54,8 +67,9 @@
     
         </div>
          &nbsp;
+        <% @posts.each do |post| %>
+        <% @comments = Comment.where(post_id: post.id) %>
         <div class="container">
-            <% @posts.each do |post| %>
           <div class="row">
             <div class="col">
                 
@@ -63,18 +77,77 @@
             <div class="col-6 border">
                 <div class="container">
                   <div class="row">
-                    <div class="col-sm-4"><%= link_to  post.user.nick_name , user_profile_path(User.where(user_id: post.user.id), Profile.where(user: post.user)) %></div>
-                    
+                     <% if post.user.nick_name == nil %>
+                      <div class="col-sm-4"><%= link_to  "User_"+post.user.id.to_s , user_profile_path(User.where(user_id: post.user.id), Profile.where(user_id: post.user_id)) %>
+                          </div>
+                    <% else %>  
+                         
+                        <div class="col-sm-4"><%= link_to  post.user.nick_name , user_profile_path(User.where(user_id: post.user.id), Profile.where(user_id: post.user_id)) %></div>
+
+                    <% end %>
                     <div class="col-sm-8"><strong><%= post.title %></strong></div>
                   </div>
                    <div>  </div>
                   <div class="row">
                     <div class="col-sm-4"></div>
                     <div class="col-sm-8 border"><%= post.body %></div>
-                  </div> 
-                  <div>  </div>
+                  </div>
                   <div class="row">
-                    <div class="col-sm-4">
+                    <div class="col-sm-4"></div>
+                    <div class="col-sm-8">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col">
+                                    <ul>
+                                      <% post.files.each do |file| %>
+                                        <li>
+                                          <%= image_tag file.preview(resize_to_limit: [100, 100]) %>
+                                        </li>
+                                      <% end %>
+                                    </ul>
+                                </div>
+                                <div class="col">
+                                    <ul>
+                                      <% post.images.each do |file| %>
+                                        <li>
+                                          <%= image_tag file.variant(resize_to_limit: [100, 100]) %>
+                                        </li>
+                                      <% end %>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                      
+                       
+                    </div>
+                  </div>     
+                  <div class="row">
+                    <div class="col-sm-4"></div>
+                    <div class="col-sm-8 "><small>Location: <%= post.city %>, <%= post.country %></small></div>
+                  </div> 
+                    <div class="row">
+                    <div class="col-sm-4"></div>
+                        <div class="col-sm-8 "><small>Created_at: <%= post.created_at.strftime("%Y-%m-%d") %> / Updated_at: <%= post.updated_at.strftime("%Y-%m-%d") %></small></div>
+                  </div>
+                    <div class="row">
+                    <div class="col-sm-4"></div>
+                    <div class="col-sm-8 ">
+                        <%= link_to edit_user_post_path(current_user, post) do %>
+                                    <button type="button" class="btn btn-primary" >
+                                     Edit
+                                    </button>
+                        <% end %>
+                        <%= link_to user_post_path(current_user, post), method: :delete do %>
+                        <button type="button" class="btn btn-primary" >
+                                     Delete
+                                    </button>
+                        </div>
+                        <% end %>
+                  </div> 
+                  
+                    
+                  <div class="row">
+                    <div class="col">
                         <% if post.privacy? && post.mark?  %>
                         <i class="fas fa-comment-slash"></i>
                         <i class="fas fa-lock"></i>
@@ -82,42 +155,180 @@
                         <i class="fas fa-comment-slash"></i>
                         <i class="fas fa-unlock"></i>
                         <% else %> 
-                        
-                       <i class="far fa-comment"></i> 
+                        <button class="btn btn-secundary" id= "buttonCommentary">
+                          <i class="far fa-comment"></i>
+                        </button>
                       <% end %>
                       </div>
-                      <div class="col-sm-8 ">
-                        <div class="container">
-                        <div class="row">
-                            <div class="col">
-                                <%= link_to user_validations_path( :user_id => current_user.id, :post_id => post.id, :valid => false ), :method => :post  do %>
-                               
-                                <%= content_tag(:i,"",class: "far fa-hand-point-down").html_safe %>
+                      <div class="col">
+                                <div class="caption" style="text-align:center;">
+                                    <%= link_to like_user_post_path(current_user,post), class: "like", method: :put do %>
+                                    <button type="button" class="btn btn-info" aria-label="Left Align">
+                                     <i class="far fa-thumbs-up" aria-hidden="true"></i>
+                                    </button>
+                                    <span class="badge"><%= post.get_upvotes.size %></span>
                                 <% end %>
-                                <%= link_to  user_validations_path(:user_id => current_user.id, :post_id => post.id, :valid => true ), :method => :post do %>
-                                <%= content_tag(:i,"",class: "far fa-hand-point-up").html_safe %>
+                                <%= link_to unlike_user_post_path(current_user, post), class: "like", method: :put do %>
+                                    <button type="button" class="btn btn-info" aria-label="Left Align">
+                                        <i class="far fa-thumbs-down" aria-hidden="true"></i>
+                                    </button>
+                                    <span class="badge"><%= post.get_downvotes.size %></span>
                                 <% end %>
-   
+                                </div>
                             </div>
-                            <div class="col">
-                              <i class="far fa-eye"></i>
-                            </div>
-                            <div class="col">
-                              <i class="far fa-flag"></i>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                     <div class="col">
+                         <div class="container">
+                             <div class="row">
+                                 <div class="col">
+                                      <% if Follow.where(user_id: current_user.id, post_id: post.id).exists? %>
+                         <div>
+                                    <button type="button" class="btn btn-success" aria-label="Left Align">
+                                        <i class="fas fa-shoe-prints" aria-hidden="true"></i>
+                                    </button></div> 
+
+
+                            <% else %> 
+                           
+                         
+                         <div><form action="/posts/<%= post.id %>/follows" method = "post">
+                                    <div style="margin:0;padding:0">
+                                        <input name="authenticity_token" type="hidden" value="<%= form_authenticity_token %>" />
+                                    </div>  
+                                  <button type="submit" class="btn btn-secondary" aria-label="Left Align"><i class="fas fa-shoe-prints" aria-hidden="true"></i></button>   
+                                  </form></div>
+
+
+                                  
+                            <% end %>
+                                 </div>
+                                 <div class="col">
+  
+                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#reportPost" ><i class="far fa-flag" aria-hidden="true"></i></button>
+                                            <div class="modal fade" id="reportPost" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                              <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                  <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Explain yourself</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                      <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                  </div>
+                                                  <div class="modal-body">
+                                                    <form action="/posts/<%= post.id %>/inappropiete" method="post">
+                                                        <div style="margin:0;padding:0">
+                                                            <input name="authenticity_token" type="hidden" value="<%= form_authenticity_token %>" />
+                                                        </div>
+                                                      <div class="form-group">
+                                                        <label for="justification" class="col-form-label">Justification:</label>
+                                                        <textarea class="form-control" id="justification"></textarea>
+                                                      </div>
+                                                    </form>
+                                                  </div>
+                                                  <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                    <button type="button" class="btn btn-primary">Send message</button>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            </div>
+
+                                        </div>
+                                     </div>
+                                 </div>
+                             </div>
                   </div>       
                 </div>
+                
             </div>
+              
             <div class="col"></div>
           </div>
-            &nbsp;
-            <% end %>
-             
         </div>
+    <!--------------- Comments ----------------->
+    <!--------------- Create Comment -----------> 
         
+        <div class="commentary">
+        <div class="container">
+        <div class="row">
+            <div class="col">  
+            </div>
+            <div class="col-6 border">
+                <Strong>Create a Comment</Strong>
+              <form action="/posts/<%= post.id %>/comments" method = "post">
+                <div style="margin:0;padding:0">
+                    <input name="authenticity_token" type="hidden" value="<%= form_authenticity_token %>" />
+                </div>  
+          <div class="form-group">
+            <label for="body">Body:</label>
+            <textarea class="form-control" id="body" name="body" placeholder="Body" rows="3"></textarea>
+          </div>
             
+          <div class="container">
+                  <div class="row">
+                    <div class="col-sm">           
+                    </div>
+                    <div class="col-sm">
+                    </div>
+                    <div class="col-sm">
+                      <button type="submit" class="btn btn-primary">Comment</button>
+                    </div>
+                  </div>
+                </div>          
+        </form>
+            </div>
+            <div class="col">
+             
+            </div>
+          </div>
+    
+        </div>
+    <!--------------- End Create Comment ------->    
+    <!--------------- Comments of the Post ----->
+        <% @comments.each do |comment| %> 
+        <div class="container">
+          <div class="row">
+            <div class="col">
+
+            </div>
+            <div class="col-6 border">
+                    <div class="container">
+                  <div class="row">
+                    <% if comment.user.nick_name == nil %>
+                      <div class="col-sm-4"><%= link_to  "User_"+comment.user.id.to_s , user_profile_path(User.where(user_id: comment.user.id), Profile.where(user_id: comment.user_id)) %>
+                          </div>
+                    <% else %>  
+                         
+                        <div class="col-sm-4"><%= link_to  comment.user.nick_name , user_profile_path(User.where(user_id: comment.user.id), Profile.where(user_id: comment.user_id)) %></div>
+
+                    <% end %>
+                           
+                    <div class="col-sm-8 border"><%= comment.body %></div>
+                  
+                      </div>  
+                  <div class="row">
+                    <div class="col-sm-4">Created at:</div>
+                    <div class="col-sm-8 "><%= comment.created_at%></div>
+                  </div>     
+             
+            </div>
+            </div>      
+              <div class="col">
+
+            </div>
+            </div>
+            
+          </div>
+   
+<!------ End of the comments of the Post --->      
+        
+        <% end %>
+            </div>
+              &nbsp;
+        <% end %>
+            <script>
+        $( "#buttonCommentary" ).click(function() {
+          $( ".commentary" ).first().toggle( "fast")
+        });
+        </script>
     </body>
 </html>

@@ -76,3 +76,8 @@ gem 'jquery-rails'
 gem 'cancancan'
 
 
+gem "aws-sdk-s3", require: false
+gem "azure-storage", require: false
+gem "google-cloud-storage", "~> 1.11", require: false
+
+gem 'acts_as_votable', '0.12.0'

@@ -1,5 +1,8 @@
 class Post < ApplicationRecord
     belongs_to :user
+    has_many_attached :images
+    has_many_attached :files
+    acts_as_votable
     has_many :image_posts
     has_many :file_attachments
     has_many :comments

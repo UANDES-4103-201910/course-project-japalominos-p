@@ -34,7 +34,12 @@ Rails.application.routes.draw do
         resources :validations
     end
   concern :postable do
-        resources :posts
+        resources :posts do
+            member do
+                put "like" => "posts#upvote"
+                put "unlike" => "posts#downvote"
+            end
+        end
     end
   resources :users, concerns: [:commentable, :shareable, :followable, :comment_of_commentable, :inappropietable, :validationable, :profilable, :postable]
   resources :posts, concerns: [:commentable, :shareable, :followable, :inappropietable, :validationable, :file_attachmentable, :image_postable]

@@ -40,3 +40,6 @@ footer {
 .navbar{
     color: white;
 }
+.commentary {
+    display: none;
+}

@@ -1,6 +1,40 @@
-<h1>Editing Post</h1>
+<%= form_for(@post, url: user_post_path(current_user,@post), html: { method: :put}) do |form| %>
+  
 
-<%= render 'form', post: @post %>
+  <div class="field">
+    <%= form.label :title %>
+    <%= form.text_field :title %>
+  </div>
 
-<%= link_to 'Show', @post %> |
-<%= link_to 'Back', posts_path %>
+  <div class="field">
+    <%= form.label :body %>
+    <%= form.text_area :body %>
+      
+  </div>
+<div class="field">
+    <%= form.label :privacy %>
+    <%= form.check_box :privacy %>
+  </div>
+
+  <div class="field">
+    <%= form.label :gps_location %>
+    <%= form.text_field :gps_location %>
+  </div>
+
+  <div class="field">
+    <%= form.label :city %>
+    <%= form.text_field :city %>
+  </div>
+
+  <div class="field">
+    <%= form.label :country %>
+    <%= form.text_field :country %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>
+
+
+<%= link_to 'Back', main_path%>

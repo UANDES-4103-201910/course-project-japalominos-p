@@ -21,6 +21,7 @@ class User < ApplicationRecord
      end
     user  
   end    
+    acts_as_voter
     has_one :profile
     has_many :posts
     has_many :comments
