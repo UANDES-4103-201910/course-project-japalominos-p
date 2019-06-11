@@ -18,7 +18,7 @@ class Post < ApplicationRecord
     validates :title, :body, presence: true
     validates :title, length: {maximum: 40}
     validates :body, length: {maximum: 150}
-    validates :mark, absence: true 
+
     
     
 end

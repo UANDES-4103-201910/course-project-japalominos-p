@@ -16,33 +16,21 @@
     <%= form.text_field :nick_name %>
   </div>
 
-  <div class="field">
-    <%= form.label :email %>
-    <%= form.text_field :email %>
-  </div>
-
+<% if current_user.admin? %>
   <div class="field">
     <%= form.label :password %>
     <%= form.text_field :password %>
     <%= form.text_field :password_confirmation %>
   </div>
+<% end %>
 
-  <div class="field">
-    <%= form.label :flags %>
-    <%= form.number_field :flags %>
-  </div>
-
-  <div class="field">
-    <%= form.label :suspended %>
-    <%= form.check_box :suspended %>
-  </div>
-
+ <% if current_user.superadmin? %>
   <div class="field">
     <%= form.label :admin %>
     <%= form.check_box :admin %>
+      
   </div>
-
-  <div class="field">
+<div class="field">
     <%= form.label :geofence_ver %>
     <%= form.check_box :geofence_ver %>
   </div>
@@ -51,11 +39,7 @@
     <%= form.label :geofence %>
     <%= form.check_box :geofence %>
   </div>
-
-  <div class="field">
-    <%= form.label :superadmin %>
-    <%= form.check_box :superadmin %>
-  </div>
+<% end %>
 
   <div class="actions">
     <%= form.submit %>

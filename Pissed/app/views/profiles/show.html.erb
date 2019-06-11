@@ -1,7 +1,6 @@
 <div class="container">
     <div class="row">
     <div class="col-lg-4">
-        <svg class="bd-placeholder-img rounded-circle" width="140" height="140" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: 140x140"><title>Placeholder</title><rect width="100%" height="100%" fill="#777"></rect><text x="50%" y="50%" fill="#777" dy=".3em">140x140</text></svg>
 <% if @profile.picture.attached? %>
    
 <%= image_tag user.avatar.variant(resize_to_limit: [100, 100]) %>
@@ -25,14 +24,37 @@
 <p>
   <%= @profile.country %>
 </p>
+        <div>
+<!----- User account ---->
 
-<%= link_to 'Config. User', user_path %> |
-<% if current_user.admin? %>
-        <%= link_to 'Config. User', user_path %> |
+<%= link_to user_path do %>
+            
+                                    <button type="button" class="btn btn-primary" aria-label="Left Align">
+                                        User Account
+                                    </button>
+            
 <% end %>
-        
-<%= link_to 'Edit', edit_user_profile_path%> |
-<%= link_to 'Back', main_path %>
+
+            </div>  
+<!----- end of User account --->
+     <!----- User profile ---->   
+<div>
+<% if @profile.user_id == current_user.id %>
+<%= link_to edit_user_profile_path do %>
+                                    <button type="button" class="btn btn-secondary" aria-label="Left Align">
+                                        Edit Profile
+                                    </button>
+<% end %>
+<% end %>
+</div>
+<!----- end of User account --->
+<div>    
+<%= link_to main_path do %>
+                                    <button type="button" class="btn btn-danger" aria-label="Left Align">
+                                        Back
+                                    </button>
+<% end %>   
+</div>      
         </div>
     <div class="col-lg-8"><% @posts.each do |post| %>
         <% @comments = Comment.where(post_id: post.id) %>
@@ -40,11 +62,11 @@
                 <div class="container border">
                   <div class="row">
                      <% if post.user.nick_name == nil %>
-                      <div class="col-sm-4"><%= link_to  "User_"+post.user.id.to_s , user_profile_path(User.where(user_id: post.user.id), Profile.where(user_id: post.user_id)) %>
+                      <div class="col-sm-4"><%= link_to  "User_"+post.user.id.to_s , user_profile_path(User.where(id: post.user.id).take, Profile.where(user_id: post.user_id).take) %>
                           </div>
                     <% else %>  
                          
-                        <div class="col-sm-4"><%= link_to  post.user.nick_name , user_profile_path(User.where(user_id: post.user.id), Profile.where(user_id: post.user_id)) %></div>
+                        <div class="col-sm-4"><%= link_to  post.user.nick_name , user_profile_path(User.where(id: post.user.id).take, Profile.where(user_id: post.user.id).take) %></div>
 
                     <% end %>
                     <div class="col-sm-8"><strong><%= post.title %></strong></div>
@@ -91,22 +113,29 @@
                     <div class="col-sm-4"></div>
                         <div class="col-sm-8 "><small>Created_at: <%= post.created_at.strftime("%Y-%m-%d") %> / Updated_at: <%= post.updated_at.strftime("%Y-%m-%d") %></small></div>
                   </div>
+                    <% if can? :update, post %>
+                    <% if can? :destroy, post %>
                     <div class="row">
                     <div class="col-sm-4"></div>
                     <div class="col-sm-8 ">
+                        <% if can? :update, post %>
                         <%= link_to edit_user_post_path(current_user, post) do %>
                                     <button type="button" class="btn btn-primary" >
                                      Edit
                                     </button>
                         <% end %>
+                        <% end %>
+                        <% if can? :destroy, post %>
                         <%= link_to user_post_path(current_user, post), method: :delete do %>
                         <button type="button" class="btn btn-primary" >
                                      Delete
                                     </button>
                         </div>
                         <% end %>
+                        <% end %>
                   </div> 
-                  
+                  <% end %>
+                  <% end %>
                     
                   <div class="row">
                     <div class="col">
@@ -234,11 +263,11 @@
                     <div class="container border">
                   <div class="row">
                     <% if comment.user.nick_name == nil %>
-                      <div class="col-sm-4"><%= link_to  "User_"+comment.user.id.to_s , user_profile_path(User.where(user_id: comment.user.id), Profile.where(user_id: comment.user_id)) %>
+                      <div class="col-sm-4"><%= link_to  "User_"+comment.user.id.to_s , user_profile_path(User.where(id: comment.user.id).take, Profile.where(user_id: comment.user_id)).take %>
                           </div>
                     <% else %>  
                          
-                        <div class="col-sm-4"><%= link_to  comment.user.nick_name , user_profile_path(User.where(user_id: comment.user.id), Profile.where(user_id: comment.user_id)) %></div>
+                        <div class="col-sm-4"><%= link_to  comment.user.nick_name , user_profile_path(User.where(id: comment.user.id).take, Profile.where(user_id: comment.user_id).take) %></div>
 
                     <% end %>
                            

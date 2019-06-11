@@ -1,12 +1,13 @@
 class ProfilesController < ApplicationController
   before_action :set_profile, only: [:show, :edit, :update, :destroy]
-
+  load_and_authorize_resource
   # GET /profiles
   # GET /profiles.json
+    
   def index
     @profiles = Profile.all
   end
-
+    
   # GET /profiles/1
   # GET /profiles/1.json
   def show
@@ -41,8 +42,7 @@ class ProfilesController < ApplicationController
   # PATCH/PUT /profiles/1
   # PATCH/PUT /profiles/1.json
   def update
-    @profile.picture.attach(params[:picture])
-    respond_to do |format|
+      respond_to do |format|
       if @profile.update(profile_params)
         format.html { redirect_to user_profile_path, notice: 'Profile was successfully updated.' }
         format.json { render :show, status: :ok, location: @profile }

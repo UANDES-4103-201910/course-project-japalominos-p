@@ -1,6 +1,6 @@
 class InappropietesController < ApplicationController
   before_action :set_inappropiete, only: [:show, :edit, :update, :destroy]
-
+  load_and_authorize_resource
   # GET /inappropietes
   # GET /inappropietes.json
   def index
@@ -14,7 +14,7 @@ class InappropietesController < ApplicationController
 
   # GET /inappropietes/new
   def new
-    @inappropiete = Inappropiete.new(current_user, post)
+    @inappropiete = Inappropiete.new
   end
 
   # GET /inappropietes/1/edit
@@ -27,12 +27,13 @@ class InappropietesController < ApplicationController
     @inappropiete = Inappropiete.new(inappropiete_params)
     @inappropiete.user_id = current_user.id
     @inappropiete.post_id = params["post_id"]  
+    
     respond_to do |format|
       if @inappropiete.save
         format.html { redirect_to root_path, notice: 'Inappropiete was successfully created.' }
         format.json { render :show, status: :created, location: @inappropiete }
       else
-        format.html { root_path }
+        format.html { redirect_to root_path }
         format.json { render json: @inappropiete.errors, status: :unprocessable_entity }
       end
     end
@@ -41,12 +42,30 @@ class InappropietesController < ApplicationController
   # PATCH/PUT /inappropietes/1
   # PATCH/PUT /inappropietes/1.json
   def update
+    @post = Post.where(id: @inappropiete.post.id).take
+    @user = User.where(id: @inappropiete.user.id).take
+    if inappropiete_params["flag"] == "1"
+        Post.update(@inappropiete.post.id, :visible => '0')
+    
+        if @user.flags == 3
+            @posts = Post.where(user_id: @user.id)
+            @posts.each do |post|
+                    @dump = Dump.create(author: post.user.id.to_s, title: post.title, body: post.body)
+                    @dump.save
+                    Post.update(post.id, :visible => '0')
+            end
+            @blacklist = Blacklist.create(user_id: @user.id) 
+            @blacklist.save
+        end
+    else
+        @inappropiete.flag = false
+    end
     respond_to do |format|
       if @inappropiete.update(inappropiete_params)
-        format.html { redirect_to @inappropiete, notice: 'Inappropiete was successfully updated.' }
+        format.html { redirect_to root_path, notice: 'Inappropiete was successfully updated.' }
         format.json { render :show, status: :ok, location: @inappropiete }
       else
-        format.html { render :edit }
+        format.html { redirect_to root_path }
         format.json { render json: @inappropiete.errors, status: :unprocessable_entity }
       end
     end
@@ -70,6 +89,10 @@ class InappropietesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def inappropiete_params
-      params.permit(:justification)
+      if current_user.admin?
+            params.require(:inappropiete).permit(:flag, :justification)
+      else
+         params.permit(:justification) 
+      end
     end
 end

@@ -1,4 +1,4 @@
-<%= form_with(model: inappropiete, local: true) do |form| %>
+<%= form_for(@inappropiete, url: post_inappropiete_path(Post.where(id: @inappropiete.post.id).take,@inappropiete), html: { method: :put}) do |form| %>
   <% if inappropiete.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(inappropiete.errors.count, "error") %> prohibited this inappropiete from being saved:</h2>
@@ -10,12 +10,6 @@
       </ul>
     </div>
   <% end %>
-
-  <div class="field">
-    <%= form.label :justification %>
-    <%= form.text_area :justification %>
-  </div>
-
   <div class="field">
     <%= form.label :flag %>
     <%= form.check_box :flag %>

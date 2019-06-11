@@ -33,7 +33,7 @@
                   <a class="dropdown-item" href="#">Blacklist</a>
                   <a class="dropdown-item" href="#">DumpList</a>
                   <div class="dropdown-divider"></div>
-                  <a class="dropdown-item" href="#">Post's Denounced</a>
+                  <a class="dropdown-item" href="post_denounced/Index">Post's Denounced</a>
                 </div>
                   
                   
@@ -42,8 +42,13 @@
                         <%= link_to "UNBOUNDED", main_path, class: "nav-link" %>
             </li>
             <form action="/search/index"  class="form-inline my-2 my-lg-0">
-            <input class="form-control form-control-sm" type="text" placeholder="Search" aria-label="Search" name="search" id="search">  
+            <input class="form-control form-control-sm" type="text" placeholder="Search" aria-label="Search" name="search" id="search"> 
+                <select class="form-control" name="type_search" id="type_search">
+                  <option value="User">User</option>
+                  <option value="Post">Post</option>
+                </select>
             <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Search</button>
+            
             </form>   
             <li class="nav-item">
                         <%= link_to "Logout", destroy_user_session_path, method: :delete, class: "nav-link" %>
@@ -69,7 +74,8 @@
                 <div class="col">
                 </div>
             <div class="col-6">
-                <p>Development by: Joaquin Palominos - Group: 15</p>
+                <a href="https://www.termsfeed.com/terms-conditions/3442d657c9bc0b52287a280530c8384e">Terms of Service</a>
+                <a href="https://www.gdprprivacypolicy.net/live.php?token=KmijMNtwo60LnmvTQL81qBchNJKmBXfy">Privacy Policy</a>
             </div>
             <div class="col">
 

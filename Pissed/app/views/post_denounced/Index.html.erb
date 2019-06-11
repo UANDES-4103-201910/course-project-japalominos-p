@@ -1,0 +1,110 @@
+<% @inappropietes.each do |inappropiete| %>
+<% if inappropiete.flag == nil %>
+ <div class="container">
+          <div class="row">
+            <div class="col">
+                
+            </div>
+            <div class="col-6 border">
+                <div class="container">
+                  <div class="row">
+                     <% if inappropiete.user.nick_name == nil %>
+                      <div class="col-sm-4"><%= link_to  "User_"+inappropiete.user.id.to_s , user_profile_path(User.where(id: inappropiete.user.id).take, Profile.where(user_id: inappropiete.user_id).take) %>
+                          </div>
+                    <% else %>  
+                         
+                        <div class="col-sm-4"><%= link_to  inappropiete.user.nick_name , user_profile_path(User.where(id: inappropiete.user.id).take, Profile.where(user_id: inappropiete.user.id).take) %></div>
+
+                    <% end %>
+                    <div class="col-sm-8"><strong>Report</strong></div>
+                  </div>
+                   <div>  </div>
+                  <div class="row">
+                    <div class="col-sm-4"></div>
+                    <div class="col-sm-8 border"><%= inappropiete.justification %></div>
+                  </div>
+                  <div class="row">
+                    <div class="col-sm-4"></div>
+                    <div class="col-sm-8 "><%= link_to edit_post_inappropiete_path(inappropiete.post.id, inappropiete) do %>
+                        <button type="button" class="btn btn-primary" >
+                                     Flag
+                                    </button>
+                        <% end %></div>
+                  </div>    
+                
+            </div>
+              </div>
+            <div class="col"></div>
+          </div>
+        </div>
+<% @posts = Post.where(id: inappropiete.post.id) %>
+<% @posts.each do |post| %>
+<div class="container">
+          <div class="row">
+            <div class="col">
+                
+            </div>
+            <div class="col-6 border">
+                <div class="container">
+                  <div class="row">
+                     <% if post.user.nick_name == nil %>
+                      <div class="col-sm-4"><%= link_to  "User_"+post.user.id.to_s , user_profile_path(User.where(id: post.user.id), Profile.where(user_id: post.user.id)) %>
+                          </div>
+                    <% else %>  
+                         
+                        <div class="col-sm-4"><%= link_to  post.user.nick_name , user_profile_path(User.where(id: post.user.id).take, Profile.where(user_id: post.user.id).take) %></div>
+
+                    <% end %>
+                    <div class="col-sm-8"><strong><%= post.title %></strong></div>
+                  </div>
+                   <div>  </div>
+                  <div class="row">
+                    <div class="col-sm-4"></div>
+                    <div class="col-sm-8 border"><%= post.body %></div>
+                  </div>
+                  <div class="row">
+                    <div class="col-sm-4"></div>
+                    <div class="col-sm-8">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col">
+                                    <ul>
+                                      <% post.files.each do |file| %>
+                                        <li>
+                                          <%= image_tag file.preview(resize_to_limit: [100, 100]) %>
+                                        </li>
+                                      <% end %>
+                                    </ul>
+                                </div>
+                                <div class="col">
+                                    <ul>
+                                      <% post.images.each do |file| %>
+                                        <li>
+                                          <%= image_tag file.variant(resize_to_limit: [100, 100]) %>
+                                        </li>
+                                      <% end %>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                      
+                       
+                    </div>
+                  </div>     
+                  <div class="row">
+                    <div class="col-sm-4"></div>
+                    <div class="col-sm-8 "><small>Location: <%= post.city %>, <%= post.country %></small></div>
+                  </div> 
+                    <div class="row">
+                    <div class="col-sm-4"></div>
+                        <div class="col-sm-8 "><small>Created_at: <%= post.created_at.strftime("%Y-%m-%d") %> / Updated_at: <%= post.updated_at.strftime("%Y-%m-%d") %></small></div>
+                        
+                  </div>
+            </div>
+              </div>
+            <div class="col"></div>
+          </div>
+        </div>
+<% end %>
+<% end %>
+<% end %>

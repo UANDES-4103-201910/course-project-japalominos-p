@@ -14,6 +14,8 @@ local:
    secret_access_key: <%= Rails.application.credentials.dig(:aws, :secret_access_key) %>
    region: us-east-1
    bucket: your_own_bucket
+   region: "" # e.g. 'us-east-1'
+
    
 #Azure
  azure:

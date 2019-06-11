@@ -3,11 +3,6 @@
     <head>
         <title>Log_in</title>
         <meta charset="utf-8">
-        <style>
-            .commentary{
-                display: none;
-            }
-        </style>
         <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
     </head> 
     
@@ -82,7 +77,7 @@
                           </div>
                     <% else %>  
                          
-                        <div class="col-sm-4"><%= link_to  post.user.nick_name , user_profile_path(User.where(user_id: post.user.id), Profile.where(user_id: post.user_id)) %></div>
+                        <div class="col-sm-4"><%= link_to  post.user.nick_name , user_profile_path(User.where(id: post.user.id).take, Profile.where(user_id: post.user_id).take) %></div>
 
                     <% end %>
                     <div class="col-sm-8"><strong><%= post.title %></strong></div>
@@ -203,8 +198,8 @@
                                  </div>
                                  <div class="col">
   
-                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#reportPost" ><i class="far fa-flag" aria-hidden="true"></i></button>
-                                            <div class="modal fade" id="reportPost" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#reportPost<%= post.id %>" ><i class="far fa-flag" aria-hidden="true"></i></button>
+                                            <div class="modal fade" id="reportPost<%= post.id %>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                               <div class="modal-dialog" role="document">
                                                 <div class="modal-content">
                                                   <div class="modal-header">
@@ -214,19 +209,20 @@
                                                     </button>
                                                   </div>
                                                   <div class="modal-body">
-                                                    <form action="/posts/<%= post.id %>/inappropiete" method="post">
-                                                        <div style="margin:0;padding:0">
+                                                    <form action="/posts/<%= post.id %>/inappropietes" method="post">
+                                                        
+                                                      <div class="form-group">
+                                                          <div style="margin:0;padding:0">
                                                             <input name="authenticity_token" type="hidden" value="<%= form_authenticity_token %>" />
                                                         </div>
-                                                      <div class="form-group">
                                                         <label for="justification" class="col-form-label">Justification:</label>
-                                                        <textarea class="form-control" id="justification"></textarea>
+                                                        <textarea class="form-control" id="justification" name="justification"></textarea>
                                                       </div>
+                                                         <button type="submit" class="btn btn-primary">Send</button>
                                                     </form>
                                                   </div>
                                                   <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                    <button type="button" class="btn btn-primary">Send message</button>
                                                   </div>
                                                 </div>
                                               </div>
@@ -247,7 +243,7 @@
     <!--------------- Comments ----------------->
     <!--------------- Create Comment -----------> 
         
-        <div class="commentary">
+        <div class="commentary" id="commentary<% post.id %>">
         <div class="container">
         <div class="row">
             <div class="col">  
@@ -325,10 +321,6 @@
             </div>
               &nbsp;
         <% end %>
-            <script>
-        $( "#buttonCommentary" ).click(function() {
-          $( ".commentary" ).first().toggle( "fast")
-        });
-        </script>
+            
     </body>
 </html>

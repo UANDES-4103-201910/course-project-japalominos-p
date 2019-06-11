@@ -1,6 +1,6 @@
 class PostsController < ApplicationController
   before_action :set_post, only: [:show, :edit, :update, :destroy, :upvote, :downvote]
-  
+  load_and_authorize_resource
   # GET /posts
   # GET /posts.json
   def index

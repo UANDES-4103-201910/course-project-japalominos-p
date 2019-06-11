@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy]
-
+  load_and_authorize_resource
   # GET /users
   # GET /users.json
   def index
@@ -10,7 +10,6 @@ class UsersController < ApplicationController
   # GET /users/1.json
   def show
   end
-
   # GET /users/new
   def new
     @user = User.new
@@ -72,8 +71,10 @@ class UsersController < ApplicationController
     def user_params
       if current_user.superadmin?     
           params.require(:user).permit(:nick_name, :email, :password, :admin, :geofence_ver, :geofence)
-      else 
+      elsif current_user.admin? 
           params.require(:user).permit(:nick_name, :email, :password)
+      else
+          params.require(:user).permit(:nick_name)
       end
           
           

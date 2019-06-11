@@ -1,4 +1,7 @@
 Rails.application.routes.draw do  
+  get 'post_denounced/Index'
+  get 'post_denounced/denounced'
+  get 'post_denounced/no_denounced'
   get 'search/index'
   devise_for :users, controllers: { omniauth_callbacks: 'users/omniauth_callbacks', registrations: 'users/registrations' }    
   resources :blacklists
