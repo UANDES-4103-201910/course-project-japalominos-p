@@ -42,6 +42,9 @@ class ProfilesController < ApplicationController
   # PATCH/PUT /profiles/1
   # PATCH/PUT /profiles/1.json
   def update
+        if not profile_params[:picture].nil?
+        @profile.picture.purge
+      end
       respond_to do |format|
       if @profile.update(profile_params)
         format.html { redirect_to user_profile_path, notice: 'Profile was successfully updated.' }
@@ -74,6 +77,6 @@ class ProfilesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def profile_params
-      params.require(:profile).permit(:bio, :gps_location, :city, :country, :picture)
+      params.require(:profile).permit(:bio, :gps_location, :city, :country,:latitude, :longitude, :picture)
     end
 end

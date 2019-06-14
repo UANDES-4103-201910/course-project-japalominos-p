@@ -1,9 +1,86 @@
+<% provide :head_tags do %>
+        <meta name='turbolinks-visit-control' content='reload'>
+        <script>
+            document.addEventListener("DOMContentLoaded",  function(){
+        initMap(<%=@profile.latitude%>, <%=@profile.longitude%>)});
+           function initMap(lat, lng) {
+    var myCoords = new google.maps.LatLng(lat, lng);
+    var mapOptions = {
+        center: myCoords,
+        zoom: 14
+    };
+
+    var map = new google.maps.Map(document.getElementById('map'), mapOptions);
+
+    var marker = new google.maps.Marker({
+        position: myCoords,
+        map: map
+    });
+}
+
+function initMap2() {
+    var lat = document.getElementById('latitude').value;
+    var lng = document.getElementById('longitude').value;
+
+    // if not defined create default position
+    if (!lat || !lng){
+        lat= -33.4372;
+        lng= -70.6506;
+        document.getElementById('latitude').value = lat;
+        document.getElementById('longitude').value = lng;
+    }
+    
+    var myCoords = new google.maps.LatLng(lat, lng);
+    var mapOptions = {
+        center: myCoords,
+        zoom: 14
+    };
+
+    var map = new google.maps.Map(document.getElementById('map2'), mapOptions);
+
+    var marker = new google.maps.Marker({
+        position: myCoords,
+        animation: google.maps.Animation.DROP,
+        map: map,
+        draggable: true
+    });
+
+    // refresh marker position and recenter map on marker
+    function refreshMarker(){
+        var lat = document.getElementById('latitude').value;
+        var lng = document.getElementById('longitude').value;
+        var myCoords = new google.maps.LatLng(lat, lng);
+        marker.setPosition(myCoords);
+        map.setCenter(marker.getPosition());   
+    }
+    // when input values change call refreshMarker
+    document.getElementById('latitude').onchange = refreshMarker;
+    document.getElementById('longitude').onchange = refreshMarker;
+
+    // when marker is dragged update input values
+    marker.addListener('drag', function() {
+        latlng = marker.getPosition();
+        newlat=(Math.round(latlng.lat()*1000000))/1000000;
+        newlng=(Math.round(latlng.lng()*1000000))/1000000;
+        document.getElementById('latitude').value = newlat;
+        document.getElementById('longitude').value = newlng;
+    });
+
+    // When drag ends, center (pan) the map on the marker position
+    marker.addListener('dragend', function() {
+        map.panTo(marker.getPosition());   
+    });
+
+}
+            
+        </script>
+    <% end %>
 <div class="container">
     <div class="row">
     <div class="col-lg-4">
 <% if @profile.picture.attached? %>
    
-<%= image_tag user.avatar.variant(resize_to_limit: [100, 100]) %>
+<%= image_tag @profile.picture.variant(combine_options: {resize:'100x100', gravity: "Center", crop: '50x50+0+0' }), :class => "my-auto mx-4 rounded-circle border border-dark" %>
   <% end %>    
 <h2>Bio</h2>
 <p>
@@ -12,7 +89,7 @@
 
 <p><em>Gps location</em></p>
 <p>
-  <%= @profile.gps_location %>
+    <div id="map"></div>
 </p>
 
 <p> <em>City</em></p>
@@ -56,7 +133,9 @@
 <% end %>   
 </div>      
         </div>
-    <div class="col-lg-8"><% @posts.each do |post| %>
+    <div class="col-lg-8">
+        <h2>Wall</h2><% @posts.each do |post| %>
+        <% if post.visible != false  %>
         <% @comments = Comment.where(post_id: post.id) %>
 
                 <div class="container border">
@@ -139,10 +218,10 @@
                     
                   <div class="row">
                     <div class="col">
-                        <% if post.privacy? && post.mark?  %>
+                        <% if post.privacy == true && post.mark == true  %>
                         <i class="fas fa-comment-slash"></i>
                         <i class="fas fa-lock"></i>
-                        <% elsif post.privacy? %>
+                        <% elsif post.privacy ==true %>
                         <i class="fas fa-comment-slash"></i>
                         <i class="fas fa-unlock"></i>
                         <% else %> 
@@ -231,9 +310,9 @@
                 </div>              
     <!--------------- Comments ----------------->
     <!--------------- Create Comment -----------> 
-        
-        <div class="commentary border">
-
+        <% if post.privacy == false %>
+        <div class="border">
+<h4>Comments</h4>
                 <Strong>Create a Comment</Strong>
               <form action="/posts/<%= post.id %>/comments" method = "post">
                 <div style="margin:0;padding:0">
@@ -283,7 +362,12 @@
 <!------ End of the comments of the Post --->      
         <% end %>
             </div>
+        <% elsif post.mark != false %>
+        <h4><em>NO COMMENTS ALLOWED BUT UNSOLVE</em></h4>
+        <% else %>
+        <h4><em>NO COMMENTS ALLOWED BUT SOLVE</em></h4>
+        <% end %>
               &nbsp;
+        <% end %>
         <% end %></div>
   </div>
-</div>

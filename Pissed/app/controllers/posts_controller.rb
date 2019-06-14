@@ -29,6 +29,13 @@ class PostsController < ApplicationController
     if @post.privacy === nil
         @post.privacy = false
     end
+       if not post_params[:images].nil?
+        @post.images.purge
+      end
+
+      if not post_params[:attachments].nil?
+        @post.attachments.purge
+      end
     respond_to do |format|
       if @post.save
         format.html { redirect_to root_path, notice: 'Post was successfully created.' }
@@ -90,9 +97,9 @@ class PostsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def post_params
       if current_user.admin? 
-          params.permit(:title, :body, :city, :country, :gps_location, :privacy, :visible, images: [], files: [])
+          params.permit(:title, :body, :city, :country, :gps_location, :privacy, :visible, :latitude, :longitude, images: [], files: [])
       else 
-          params.permit(:title, :body, :city, :country, :gps_location, :privacy, images: [], files: [])
+          params.permit(:title, :body, :city, :country, :gps_location, :privacy,:latitude, :longitude, images: [], files: [])
       end      
     end
 end

@@ -40,6 +40,13 @@ footer {
 .navbar{
     color: white;
 }
-.commentary {
-    display: none;
-}
+
+
+#map2 {
+        height: 600px;  /* The height is 400 pixels */
+        width: 400px;  /* The width is the width of the web page */
+       }
+#map {
+        height: 600px;  /* The height is 400 pixels */
+        width: 400px;  /* The width is the width of the web page */
+       }

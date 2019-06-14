@@ -10,7 +10,19 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
       <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
       <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
-   
+   <%= javascript_include_tag 'https://maps.googleapis.com/maps/api/js?key=AIzaSyB8NGOEgThj197SjcKtnfp7msjXtkrHewY' %>
+       <%= yield(:head_tags) %>
+      <style>
+       /* Set the size of the div element that contains the map */
+      #map2 {
+        height: 400px;  /* The height is 400 pixels */
+        width: 100%;  /* The width is the width of the web page */
+       }
+           #map {
+        height: 400px;  /* The height is 400 pixels */
+        width: 100%;  /* The width is the width of the web page */
+       }
+    </style>
   </head>
 
   <body>
@@ -30,10 +42,10 @@
                   Bad-Boys
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <a class="dropdown-item" href="#">Blacklist</a>
-                  <a class="dropdown-item" href="#">DumpList</a>
+                  <a class="dropdown-item" href="/blacklists">Blacklist</a>
+                  <a class="dropdown-item" href="/dumps">DumpList</a>
                   <div class="dropdown-divider"></div>
-                  <a class="dropdown-item" href="post_denounced/Index">Post's Denounced</a>
+                  <a class="dropdown-item" href="/post_denounced/Index">Post's Denounced</a>
                 </div>
                   
                   
