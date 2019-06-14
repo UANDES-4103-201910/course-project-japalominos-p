@@ -218,9 +218,11 @@ function initMap2() {
                     <div class="col-sm-4"></div>
                         <div class="col-sm-8 "><small>Created_at: <%= post.created_at.strftime("%Y-%m-%d") %> / Updated_at: <%= post.updated_at.strftime("%Y-%m-%d") %></small></div>
                   </div>
+                    <% if current_user == post.user %>
                     <div class="row">
                     <div class="col-sm-4"></div>
                     <div class="col-sm-8 ">
+                    
                         <%= link_to edit_user_post_path(current_user, post) do %>
                                     <button type="button" class="btn btn-primary" >
                                      Edit
@@ -234,7 +236,7 @@ function initMap2() {
                         <% end %>
                   </div> 
                   
-                    
+                    <% end %>
                   <div class="row">
                     <div class="col">
                         <% if post.privacy? && post.mark?  %>
